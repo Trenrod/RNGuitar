@@ -1,0 +1,6 @@
+export default {
+  NOTE_TYPE: "NOTE_TYPE",
+  FRET_TYPE: "FRET_TYPE",
+  NOTE_TIME: "NOTE_TIME",
+  FRET_TIME: "FRET_TIME"
+}
