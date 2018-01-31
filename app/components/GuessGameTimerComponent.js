@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, ReactPropTypes} from 'react';
 import {
   Text,
   StyleSheet,
@@ -8,6 +8,8 @@ import {
   Slider
 } from 'react-native';
 import text from '../localisation/text';
+import GuessMode from '../models/GuessModes';
+import PropTypes from 'prop-types';
 
 class GuessGameTimerComponent extends Component {
   constructor(props) {
@@ -67,9 +69,13 @@ class GuessGameTimerComponent extends Component {
   }
 
   _setResult() {
+    let result = this.props.task.note;
+    if (this.props.mode === GuessMode.FRET_TIME) {
+      result = this.props.task.fret;
+    }
     this.setState({
       timeLeft: 0,
-      result: this.props.task.note
+      result: result
     });
     this.newGuessTask();
   }

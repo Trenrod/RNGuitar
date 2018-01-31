@@ -46,18 +46,14 @@ class MainComponents extends Component {
     switch (this.state.guessMode) {
       case GUESS_MODE.NOTE_TYPE:
       case GUESS_MODE.FRET_TYPE:
-        componentToDisplay = <GuessGameComponent mode={this.state.guessMode} gotoMenu={()=>this.selectGuessMode(null)}></GuessGameComponent>
-        break;
       case GUESS_MODE.NOTE_TIME:
       case GUESS_MODE.FRET_TIME:
         componentToDisplay = <GuessGameComponent mode={this.state.guessMode} gotoMenu={()=>this.selectGuessMode(null)}></GuessGameComponent>
         break;
       default:
         componentToDisplay = <MenuComponent 
-          guessNoteByTime={()=>this.selectGuessMode(GUESS_MODE.NOTE_TIME)}
-          guessNoteByTyping={()=>this.selectGuessMode(GUESS_MODE.NOTE_TYPE)}
-          guessFretByTime={()=>this.selectGuessMode(GUESS_MODE.FRET_TIME)}
-          guessFretByTyping={()=>this.selectGuessMode(GUESS_MODE.FRET_TYPE)}
+          selectGuessMode={this.selectGuessMode}
+          guessMode={this.state.guessMode}
         ></MenuComponent>;
         break;
     }

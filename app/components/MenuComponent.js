@@ -6,8 +6,10 @@ import {
   Button,
   TouchableHighlight
 } from 'react-native';
+import GuessModes from '../models/GuessModes';
 import GuessModeTitles from '../models/GuessModeTitles';
 import text from '../localisation/text';
+import PropTypes from 'prop-types';
 
 class MenuComponent extends Component {
   constructor(props) {
@@ -22,28 +24,28 @@ class MenuComponent extends Component {
         </View>
         <View style={styles.buttonsContainer}>
           <View style={styles.buttonView}>
-            <TouchableHighlight onPress={this.props.guessNoteByTime} underlayColor="white">
+            <TouchableHighlight onPress={()=>{this.props.selectGuessMode(GuessModes.NOTE_TIME)}} underlayColor="white">
               <View style={styles.button}>
                 <Text style={styles.buttonText}>{GuessModeTitles.NOTE_TIME}</Text>
               </View>
             </TouchableHighlight>
           </View>
           <View style={styles.buttonView}>
-            <TouchableHighlight onPress={this.props.guessNoteByTyping} underlayColor="white">
+            <TouchableHighlight onPress={()=>{this.props.selectGuessMode(GuessModes.NOTE_TYPE)}} underlayColor="white">
               <View style={styles.button}>
                 <Text style={styles.buttonText}>{GuessModeTitles.NOTE_TYPE}</Text>
               </View>
             </TouchableHighlight>
           </View>
           <View style={styles.buttonView}>
-            <TouchableHighlight onPress={this.props.guessFretByTime} underlayColor="white">
+            <TouchableHighlight onPress={()=>{this.props.selectGuessMode(GuessModes.FRET_TIME)}} underlayColor="white">
               <View style={styles.button}>
                 <Text style={styles.buttonText}>{GuessModeTitles.FRET_TIME}</Text>
               </View>
             </TouchableHighlight>
           </View>
           <View style={styles.buttonView}>
-            <TouchableHighlight onPress={this.props.guessFretByTyping} underlayColor="white">
+            <TouchableHighlight onPress={()=>{this.props.selectGuessMode(GuessModes.FRET_TYPE)}} underlayColor="white">
               <View style={styles.button}>
                 <Text style={styles.buttonText}>{GuessModeTitles.FRET_TYPE}</Text>
               </View>
@@ -95,5 +97,9 @@ const styles = StyleSheet.create({
     color: 'white'
   }
 });
+
+MenuComponent.propTypes = {
+  selectGuessMode: PropTypes.func
+}
 
 export default MenuComponent;

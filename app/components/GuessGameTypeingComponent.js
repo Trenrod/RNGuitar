@@ -7,6 +7,7 @@ import {
   TouchableHighlight
 } from 'react-native';
 import text from '../localisation/text';
+import GuessModes from '../models/GuessModes';
 
 class GuessGameTypeingComponent extends Component {
   constructor(props) {
@@ -17,6 +18,10 @@ class GuessGameTypeingComponent extends Component {
   render() {
 
     let placeholder = this.props.answerPlaceholder;
+    let keyboardType = "default";
+    if (this.props.mode === GuessModes.FRET_TYPE) {
+      keyboardType="numeric";
+    }
 
     return (
       <View style={styles.container}>
@@ -32,6 +37,9 @@ class GuessGameTypeingComponent extends Component {
         </View>
         <View style={[styles.answerView, {backgroundColor: this.props.backgroundColor}]}>
           <TextInput
+            autoFocus={true}
+            clearTextOnFocus={true}
+            keyboardType={keyboardType}
             style={styles.answerText}
             placeholder={placeholder}
             value={this.props.curAnswer}

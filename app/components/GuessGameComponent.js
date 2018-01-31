@@ -6,6 +6,8 @@ import {
   TextInput,
   TouchableHighlight
 } from 'react-native';
+import PropTypes from 'prop-types';
+
 import { GenerateTask } from '../lib/TaskGenerator'
 import GUESS_MODES from '../models/GuessModes';
 import GuessGameTypeingComponent from './GuessGameTypeingComponent';
@@ -32,7 +34,7 @@ class GuessGameComponent extends Component {
     this.wrongAnswer = this._wrongAnswer.bind(this);
   }
 
-  _componentWillUnmount() {
+  componentWillUnmount() {
     if (this.timeout != null) {
       clearTimeout(this.timeout);
     }
@@ -78,7 +80,13 @@ class GuessGameComponent extends Component {
 
   _setAnswer() {
     if (this.mode === GUESS_MODES.FRET_TYPE) {
-      if (this.state.curAnswer.toLowerCase() === this.state.task.fret.toLowerCase()) {
+      let fretNumber = -1;
+      try {
+        fretNumber = parseInt(this.state.curAnswer);
+      } catch (error) {
+        fretNumber = -1;
+      }
+      if (Number.isSafeInteger(fretNumber) && fretNumber === this.state.task.fret) {
         return this.correctAnswer();
       }
     } else if (this.mode === GUESS_MODES.NOTE_TYPE) {
@@ -116,6 +124,7 @@ class GuessGameComponent extends Component {
         setAnswer={this.setAnswer}
         guessFields={guessFields}
         answerPlaceholder={answerPlaceholder}
+        mode={this.mode}
       />
     } else {
       interComponent = <GuessGameTypeingComponent
@@ -126,6 +135,7 @@ class GuessGameComponent extends Component {
         setAnswer={this.setAnswer}
         guessFields={guessFields}
         answerPlaceholder={answerPlaceholder}
+        mode={this.mode}
       />
     }
 
@@ -183,5 +193,10 @@ const styles = StyleSheet.create({
     justifyContent:'flex-end'
   }
 })
+
+GuessGameComponent.propTypes = {
+  mode: PropTypes.string,
+  gotoMenu: PropTypes.func
+}
 
 export default GuessGameComponent;
