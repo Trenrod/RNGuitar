@@ -11,6 +11,10 @@ import GUESS_MODES from '../models/GuessModes';
 import GuessGameTypeingComponent from './GuessGameTypeingComponent';
 import GuessGameTimerComponent from './GuessGameTimerComponent';
 
+import GuessModeTitles from '../models/GuessModeTitles';
+
+import text from '../localisation/text';
+
 class GuessGameComponent extends Component {
   constructor(props) {
     super(props);
@@ -20,7 +24,7 @@ class GuessGameComponent extends Component {
       backgroundColor: '#FFF'
     }
     this.mode = this.props.mode;
-    this.answer = this._answer.bind(this);
+    this.setAnswer = this._setAnswer.bind(this);
     this.timeout = null;
 
     this.updateCurAnswer = this._updateCurAnswer.bind(this);
@@ -72,36 +76,66 @@ class GuessGameComponent extends Component {
     }, 1000);
   }
 
-  _answer() {
+  _setAnswer() {
     if (this.mode === GUESS_MODES.FRET_TYPE) {
       if (this.state.curAnswer.toLowerCase() === this.state.task.fret.toLowerCase()) {
         return this.correctAnswer();
       }
-    } else if (this.mode === GUESS_MODES.FRET_TIME || this.mode === GUESS_MODES.NOTE_TIME) {
-      return this.correctAnswer();
-    } else {
+    } else if (this.mode === GUESS_MODES.NOTE_TYPE) {
       if (this.state.curAnswer.toLowerCase() === this.state.task.note.toLowerCase()) {
         return this.correctAnswer();
       }
+    } else {
+      return this.correctAnswer();
     }
     return this.wrongAnswer();
   }
 
   render() {
-    // TODO: Handle Mode, typing, timeout note and fret
+    let answerPlaceholder = text.guitar_note;
+    let guessFields = {
+      leftTitle: text.guitar_string,
+      leftValue: this.state.task.string
+    };
+    if (this.mode === GUESS_MODES.FRET_TIME || this.mode === GUESS_MODES.FRET_TYPE) {
+      guessFields.rightTitle =text.guitar_note;
+      guessFields.rightValue = this.state.task.note;
+      answerPlaceholder = text.guitar_fret;
+    } else {
+      guessFields.rightTitle =text.guitar_fret;
+      guessFields.rightValue = this.state.task.fret;
+    }
+
+    let interComponent = null;
+    if (this.mode === GUESS_MODES.FRET_TIME || this.mode === GUESS_MODES.NOTE_TIME) {
+      interComponent = <GuessGameTimerComponent
+        task={this.state.task}
+        curAnswer={this.state.curAnswer}
+        backgroundColor={this.state.backgroundColor}
+        updateCurAnswer={this.updateCurAnswer}
+        setAnswer={this.setAnswer}
+        guessFields={guessFields}
+        answerPlaceholder={answerPlaceholder}
+      />
+    } else {
+      interComponent = <GuessGameTypeingComponent
+        task={this.state.task}
+        curAnswer={this.state.curAnswer}
+        backgroundColor={this.state.backgroundColor}
+        updateCurAnswer={this.updateCurAnswer}
+        setAnswer={this.setAnswer}
+        guessFields={guessFields}
+        answerPlaceholder={answerPlaceholder}
+      />
+    }
+
     return (
       <View style={styles.container}>
         <View style={styles.titleView}>
-          <Text style={styles.titleText}>Guess note by string and fret</Text>
+          <Text style={styles.titleText}>{GuessModeTitles[this.mode]}</Text>
         </View>
-        <GuessGameTimerComponent
-          task={this.state.task}
-          curAnswer={this.state.curAnswer}
-          backgroundColor={this.state.backgroundColor}
-          updateCurAnswer={this.updateCurAnswer}
-          answer={this.answer}
-        />
-        <View style={{flex: 1, justifyContent:'flex-end'}}>
+        {interComponent}
+        <View style={styles.buttonBack}>
           <TouchableHighlight onPress={this.props.gotoMenu} underlayColor="white">
             <View style={styles.buttonView}>
               <Text style={styles.buttonText}>Back</Text>
@@ -125,8 +159,7 @@ const styles = StyleSheet.create({
     padding: 50
   },
   titleText: {
-    fontWeight: 'bold',
-    fontSize: 20
+    fontSize: 30
   },
   guessContainer: {
     flex:0,
@@ -144,6 +177,10 @@ const styles = StyleSheet.create({
   buttonText: {
     padding: 20,
     color: 'white'
+  },
+  buttonBack: {
+    flex: 1,
+    justifyContent:'flex-end'
   }
 })
 

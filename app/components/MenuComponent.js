@@ -6,6 +6,8 @@ import {
   Button,
   TouchableHighlight
 } from 'react-native';
+import GuessModeTitles from '../models/GuessModeTitles';
+import text from '../localisation/text';
 
 class MenuComponent extends Component {
   constructor(props) {
@@ -15,33 +17,35 @@ class MenuComponent extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Auswahl des typs</Text>
+        <View style={styles.titleView}>
+          <Text style={styles.title}>{text.select_mode_title}</Text>
+        </View>
         <View style={styles.buttonsContainer}>
           <View style={styles.buttonView}>
             <TouchableHighlight onPress={this.props.guessNoteByTime} underlayColor="white">
               <View style={styles.button}>
-                <Text style={styles.buttonText}>Guess note by typing</Text>
+                <Text style={styles.buttonText}>{GuessModeTitles.NOTE_TIME}</Text>
+              </View>
+            </TouchableHighlight>
+          </View>
+          <View style={styles.buttonView}>
+            <TouchableHighlight onPress={this.props.guessNoteByTyping} underlayColor="white">
+              <View style={styles.button}>
+                <Text style={styles.buttonText}>{GuessModeTitles.NOTE_TYPE}</Text>
+              </View>
+            </TouchableHighlight>
+          </View>
+          <View style={styles.buttonView}>
+            <TouchableHighlight onPress={this.props.guessFretByTime} underlayColor="white">
+              <View style={styles.button}>
+                <Text style={styles.buttonText}>{GuessModeTitles.FRET_TIME}</Text>
               </View>
             </TouchableHighlight>
           </View>
           <View style={styles.buttonView}>
             <TouchableHighlight onPress={this.props.guessFretByTyping} underlayColor="white">
               <View style={styles.button}>
-                <Text style={styles.buttonText}>Guess fret by typing</Text>
-              </View>
-            </TouchableHighlight>
-          </View>
-          <View style={styles.buttonView}>
-            <TouchableHighlight onPress={this.props.guessNoteByTime} underlayColor="white">
-              <View style={styles.button}>
-                <Text style={styles.buttonText}>Guess note by time</Text>
-              </View>
-            </TouchableHighlight>
-          </View>
-          <View style={styles.buttonView}>
-            <TouchableHighlight onPress={this.props.guessFretByTyping} underlayColor="white">
-              <View style={styles.button}>
-                <Text style={styles.buttonText}>Guess fret by typing</Text>
+                <Text style={styles.buttonText}>{GuessModeTitles.FRET_TYPE}</Text>
               </View>
             </TouchableHighlight>
           </View>
@@ -56,14 +60,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF'
   },
+  titleView: {
+    flex: 0,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    padding: 50
+  },
   title: {
     flex: 0,
     justifyContent: 'flex-start',
     alignSelf: 'center',
-    margin: 30
+    fontSize: 30
   },
   buttonsContainer: {
-    flex: 1,
+    flex: 0,
     justifyContent: 'flex-start',
     alignItems: 'stretch',
     margin: 10

@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableHighlight
 } from 'react-native';
+import text from '../localisation/text';
 
 class GuessGameTypeingComponent extends Component {
   constructor(props) {
@@ -14,32 +15,35 @@ class GuessGameTypeingComponent extends Component {
   }
 
   render() {
+
+    let placeholder = this.props.answerPlaceholder;
+
     return (
       <View style={styles.container}>
         <View style={styles.guessContainer}>
-          <View style={{flex:0, alignItems: 'center'}}>
-            <Text>String</Text>
-            <Text style={styles.guessText}>{this.props.task.string}</Text>
+          <View style={styles.guessPartContainer}>
+            <Text>{this.props.guessFields.leftTitle}</Text>
+            <Text style={styles.guessText}>{this.props.guessFields.leftValue}</Text>
           </View>
-          <View style={{flex:0, alignItems: 'center'}}>
-            <Text>Fret</Text>
-            <Text style={styles.guessText}>{this.props.task.fret}</Text>
+          <View style={styles.guessPartContainer}>
+            <Text>{this.props.guessFields.rightTitle}</Text>
+            <Text style={styles.guessText}>{this.props.guessFields.rightValue}</Text>
           </View>
         </View>
-        <View style={{flex: 0, alignItems:'stretch', backgroundColor: this.props.backgroundColor}}>
+        <View style={[styles.answerView, {backgroundColor: this.props.backgroundColor}]}>
           <TextInput
-            style={{fontSize: 60, margin: 10}}
-            placeholder="Note"
+            style={styles.answerText}
+            placeholder={placeholder}
             value={this.props.curAnswer}
             textAlign={'center'}
             onChangeText={(text) => { this.props.updateCurAnswer(text); }}
-            onSubmitEditing={() => { this.props.answer(); }}
+            onSubmitEditing={() => { this.props.setAnswer(); }}
           />
         </View>
-        <View style={{flex: 0, justifyContent:'flex-end', alignItems:'center'}}>
-          <TouchableHighlight onPress={() => { this.props.answer(); }} underlayColor="white">
+        <View style={styles.buttonContainer}>
+          <TouchableHighlight onPress={() => { this.props.setAnswer(); }} underlayColor="white">
             <View style={styles.buttonView}>
-              <Text style={styles.buttonText}>Check answer</Text>
+              <Text style={styles.buttonText}>{text.check_answer}</Text>
             </View>
           </TouchableHighlight>
         </View>
@@ -57,18 +61,37 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     justifyContent: 'space-around'
   },
+  guessPartContainer: {
+    flex:0,
+    alignItems: 'center'
+  },
   guessText: {
     fontWeight: 'bold',
     fontSize: 40
   },
+  answerView: {
+    flex: 0,
+    alignItems:'stretch'
+  },
+  answerText: {
+    fontSize: 60, 
+    margin: 10
+  },
+  buttonContainer: {
+    flex: 0,
+    justifyContent:'flex-end',
+    alignItems:'center'
+  },
   buttonView: {
-    alignItems: 'center',
-    backgroundColor: '#2196F3'
+    backgroundColor: '#2196F3',
+    flex: 0,
+    alignItems:'center',
+    margin: 10
   },
   buttonText: {
     padding: 20,
     color: 'white'
-  }
+  },
 })
 
 export default GuessGameTypeingComponent;

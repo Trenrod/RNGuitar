@@ -7,6 +7,7 @@ import {
   TouchableHighlight,
   Slider
 } from 'react-native';
+import text from '../localisation/text';
 
 class GuessGameTimerComponent extends Component {
   constructor(props) {
@@ -14,7 +15,7 @@ class GuessGameTimerComponent extends Component {
     this.state = {
       timeLeft: 0,
       maxTime: 30,
-      result: ""
+      result: this.props.answerPlaceholder
     };
     this.curTimer = null;
     this.setResult = this._setResult.bind(this);
@@ -47,7 +48,7 @@ class GuessGameTimerComponent extends Component {
     } else {
       this.setState({
         timeLeft: this.state.timeLeft + 1,
-        result: ""
+        result: this.props.answerPlaceholder
       });
       this.setTimeout(this.tick, 1000);
     }
@@ -61,7 +62,7 @@ class GuessGameTimerComponent extends Component {
   }
 
   _newGuessTask() {
-    this.props.answer();
+    this.props.setAnswer();
     this.setTimeout(this.tick, 1000);
   }
 
@@ -77,30 +78,27 @@ class GuessGameTimerComponent extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.guessContainer}>
-          <View style={{flex:0, alignItems: 'center'}}>
-            <Text>String</Text>
-            <Text style={styles.guessText}>{this.props.task.string}</Text>
+          <View style={styles.guessPartContainer}>
+            <Text>{this.props.guessFields.leftTitle}</Text>
+            <Text style={styles.guessText}>{this.props.guessFields.leftValue}</Text>
           </View>
-          <View style={{flex:0, alignItems: 'center'}}>
-            <Text>Fret</Text>
-            <Text style={styles.guessText}>{this.props.task.fret}</Text>
+          <View style={styles.guessPartContainer}>
+            <Text>{this.props.guessFields.rightTitle}</Text>
+            <Text style={styles.guessText}>{this.props.guessFields.rightValue}</Text>
           </View>
         </View>
-        <View style={{flex: 0, alignItems:'stretch', backgroundColor: this.props.backgroundColor}}>
-          <TextInput
-            style={{fontSize: 60, margin: 10}}
-            placeholder="Note"
-            value={this.state.result}
+        <View style={[styles.answerView, {backgroundColor: this.props.backgroundColor}]}>
+          <Text
+            style={styles.answerText}
             textAlign={'center'}
-            onChangeText={(text) => { this.props.updateCurAnswer(text); }}
-            onSubmitEditing={() => { this.props.answer(); }}
-          />
+            editable={false}
+          >{this.state.result}</Text>
         </View>
-        <View style={{flex: 0, alignItems:'center', margin: 10}}>
-          <Text style={{fontSize: 30}}>Time left: {this.state.maxTime - this.state.timeLeft}</Text>
+        <View style={styles.counterView}>
+          <Text style={styles.counterText}>{text.time_left} {this.state.maxTime - this.state.timeLeft}</Text>
         </View>
-        <View style={{flex: 0, justifyContent:'flex-end', alignItems:'stretch', margin: 10}}>
-          <Text style={{fontSize: 30}}>Time to guess: {this.state.maxTime}</Text>
+        <View style={styles.sliderView}>
+          <Text style={styles.sliderText}>{text.time_to_guess} {this.state.maxTime}</Text>
           <Slider
             minimumValue={1}
             maximumValue={120}
@@ -123,17 +121,38 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     justifyContent: 'space-around'
   },
+  guessPartContainer: {
+    flex:0,
+    alignItems: 'center'
+  },
   guessText: {
     fontWeight: 'bold',
     fontSize: 40
   },
-  buttonView: {
-    alignItems: 'center',
-    backgroundColor: '#2196F3'
+  answerView: {
+    flex: 0,
+    alignItems:'center'
   },
-  buttonText: {
-    padding: 20,
-    color: 'white'
+  answerText: {
+    fontSize: 60, 
+    margin: 10
+  },
+  counterView: {
+    flex: 0,
+    alignItems:'center',
+    margin: 10
+  },
+  counterText: {
+    fontSize: 30
+  },
+  sliderView: {
+    flex: 0,
+    justifyContent:'flex-end',
+    alignItems:'stretch',
+    margin: 10
+  },
+  sliderText: {
+    fontSize: 20
   }
 });
 
